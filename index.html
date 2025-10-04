@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Maths</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f9;
+    }
+    h1 {
+      margin: 20px 0;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(2, 200px);
+      gap: 20px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    button {
+      padding: 15px;
+      background: #c471ed;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #a44ee0;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      margin: 10px 0;
+      width: 90%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .close {
+      background: crimson;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📘 Basic Maths</h1>
+
+  <div class="container">
+    <button onclick="openModal('prime')">Prime number or not</button>
+    <button onclick="openModal('factorial')">Calculate factorial</button>
+    <button onclick="openModal('sum')">Sum till N</button>
+    <button onclick="openModal('palindrome')">Palindrome</button>
+    <button onclick="openModal('leap')">Leap year or not</button>
+    <button onclick="openModal('fibonacci')">Fibonacci series</button>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h2 id="modal-title"></h2>
+      <input type="number" id="user-input" placeholder="Enter a number">
+      <button onclick="solve()">Submit</button>
+      <p id="result"></p>
+      <br>
+      <button class="close" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    let currentTask = "";
+
+    function openModal(task) {
+      currentTask = task;
+      document.getElementById("modal-title").innerText = task.toUpperCase();
+      document.getElementById("modal").style.display = "flex";
+      document.getElementById("user-input").value = "";
+      document.getElementById("result").innerText = "";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function solve() {
+      let num = document.getElementById("user-input").value;
+      let result = "";
+
+      if (num === "" && currentTask !== "fibonacci") {
+        result = "Please enter a number.";
+      } else {
+        num = parseInt(num);
+        switch(currentTask) {
+          case "prime":
+            result = isPrime(num) ? num + " is Prime" : num + " is Not Prime";
+            break;
+          case "factorial":
+            result = "Factorial: " + factorial(num);
+            break;
+          case "sum":
+            result = "Sum till " + num + " = " + (num*(num+1))/2;
+            break;
+          case "palindrome":
+            result = isPalindrome(num) ? num + " is Palindrome" : num + " is Not Palindrome";
+            break;
+          case "leap":
+            result = (num%400===0 || (num%4===0 && num%100!==0)) ? num + " is Leap Year" : num + " is Not Leap Year";
+            break;
+          case "fibonacci":
+            result = "Fibonacci: " + fibonacci(num).join(", ");
+            break;
+        }
+      }
+      document.getElementById("result").innerText = result;
+    }
+
+    // Functions
+    function isPrime(n) {
+      if (n < 2) return false;
+      for (let i=2; i<=Math.sqrt(n); i++) {
+        if (n % i === 0) return false;
+      }
+      return true;
+    }
+
+    function factorial(n) {
+      if (n === 0 || n === 1) return 1;
+      return n * factorial(n-1);
+    }
+
+    function isPalindrome(n) {
+      let str = n.toString();
+      return str === str.split("").reverse().join("");
+    }
+
+    function fibonacci(n) {
+      let series = [0,1];
+      for (let i=2; i<n; i++) {
+        series.push(series[i-1] + series[i-2]);
+      }
+      return series.slice(0,n);
+    }
+  </script>
+
+</body>
+</html>
